@@ -12,6 +12,5 @@ public class Schedule {
         while ((inputLine = in.readLine()) != null)
             System.out.println(inputLine);
         in.close();
-       // bjhsdfbdhlblf
     }
 }
