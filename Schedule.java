@@ -37,6 +37,7 @@ public class Schedule {
         	Boolean grw = line.contains("GRW");
         	
         	int classesSize = classes.length;
+        	SchoolClass[] classStruct = new SchoolClass[classesSize];
         	
         	for (int i = 0; i < classesSize; i++){
         		if (line.contains(classes[i])){
