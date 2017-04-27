@@ -18,8 +18,6 @@ public class Schedule {
     	System.out.println("Enter in FA for Fall Semester or SP for Spring Semester: ");
     	currentSemester = input.next();
     	
-    	
-    	
         URL scheduleReader = new URL("https://admin.washcoll.edu/schedules/" + currentYear + currentSemester + "schedules.txt");
         BufferedReader in = new BufferedReader(
         new InputStreamReader(scheduleReader.openStream()));
