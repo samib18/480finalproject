@@ -3,6 +3,19 @@ import java.util.*;
 import java.io.*;
 
 public class Schedule {
+	
+	public static void printday(String day, Map<String, Set<String>> list) { 
+			for(Map.Entry<String, Set<String>> entry : list.entrySet()){
+				for(String s : entry.getValue()){
+					String date = s.substring(43, 46);
+					if(date.contains(day)){
+						System.out.println(s);	
+					}
+				}
+	    	}
+	}
+	
+	
     public static void main(String[] args) throws Exception {
     	
 		Scanner input = new Scanner(System.in);
@@ -86,11 +99,23 @@ public class Schedule {
     		}
     	}
     	
-    	for(Map.Entry<String, Set<String>> entry : list.entrySet()){
+    	/*for(Map.Entry<String, Set<String>> entry : list.entrySet()){
 			for(String s : entry.getValue()){
 				System.out.println(s + " ");
 			}
-    	}
+    	}*/
+    	
+    	
+    	System.out.println( " --- Monday --- ");
+    	printday("M", list);
+    	System.out.println(" --- Tuesday --- ");
+    	printday("T", list);
+    	System.out.println(" --- Wednesday --- ");
+    	printday("W", list);
+    	System.out.println(" --- Thursday --- ");
+    	printday("TH", list);
+    	System.out.println(" --- Friday --- ");
+    	printday("F", list);
     }      
 }
 
