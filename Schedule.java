@@ -1,13 +1,13 @@
 import java.net.*;
-import java.util.Scanner;
+import java.util.*;
 import java.io.*;
 
 public class Schedule {
     public static void main(String[] args) throws Exception {
-
-    	Scanner input = new Scanner(System.in);
     	
-    	String currentYear;
+		Scanner input = new Scanner(System.in);
+    	
+		String currentYear;
     	String currentSemester;
     	String classDescriptors;
     	String[] classes;
@@ -19,55 +19,80 @@ public class Schedule {
     	currentYear = input.next();
     	System.out.println("Enter in FA for Fall Semester or SP for Spring Semester: ");
     	currentSemester = input.next();
+    	
+    	URL scheduleReader = new URL("https://admin.washcoll.edu/schedules/" + currentYear + currentSemester + "schedules.html");
+    	BufferedReader in = new BufferedReader( new InputStreamReader(scheduleReader.openStream()));
     
-        URL scheduleReader = new URL("https://admin.washcoll.edu/schedules/" + currentYear + currentSemester + "schedules.txt");
-        BufferedReader in = new BufferedReader(
-        new InputStreamReader(scheduleReader.openStream()));
-    
-        for (String line = in.readLine(); line != null; line = in.readLine())
-        {	
-        	int quitPosition = line.indexOf("%%CQQ1");
-        	int quitPosition2 = line.indexOf("%%CQQ2");
-        	int quitPosition3 = line.indexOf("%%CQQ4");
-        	int quitPosition4 = line.indexOf("QQ0");
-        	int quitPosition5 = line.indexOf("QQ1");
-        	int quitPosition6 = line.indexOf("QQ2");
-        	int quitPosition7 = line.indexOf("QQ4");
-        	
-        	Boolean grw = line.contains("GRW");
-        	
-        	int classesSize = classes.length;
-        	
-        	for (int i = 0; i < classesSize; i++){
-        		if (line.contains(classes[i])){
-        			if (quitPosition >= 0 ){
-        				System.out.println(line.substring(89, 99) + line.substring(104, quitPosition));
-        			}else if(quitPosition2 >= 0){
-        				System.out.println(line.substring(89, 99) + line.substring(104, quitPosition2));
-        			}else if(quitPosition3 >= 0){
-        				if(grw == true){
-        					System.out.println(line.substring(121, 131) + line.substring(136, quitPosition3));
-        				}else{
-        					System.out.println(line.substring(89, 99) + line.substring(104, quitPosition3));
-        				}
-        			}else if(quitPosition4 >= 0){
-        				System.out.println(line.substring(89, 99) + line.substring(104, quitPosition4));
-        			}else if(quitPosition5 >= 0){
-        				System.out.println(line.substring(89, 99) + line.substring(104, quitPosition5));
-        			}else if(quitPosition6 >= 0){
-        				System.out.println(line.substring(89, 99) + line.substring(104, quitPosition6));
-        			}else if(quitPosition7 >= 0){
-        				if(grw == true){
-        					System.out.println(line.substring(121, 131) + line.substring(136, quitPosition7));
-        				}else{
-        					System.out.println(line.substring(89, 99) + line.substring(104, quitPosition7));
-        				}
-        			}else{
-        				System.out.println(line);
-        			}
-        		}
-        	}
-        }      
-    }
+    	String line = "";
+    	int classesSize = classes.length;
+
+    	Map<String, Set<String>> list = new HashMap<String, Set<String>>();
+    	
+    	while((line = in.readLine()) != null)
+    	{
+    		String piece = "k\">";
+    		int quitPosition = line.indexOf("</A>/");
+    		int quitPosition1 = line.indexOf("</A>");
+    		int quitPosition2 = line.indexOf(piece);
+    		
+    		for (int i = 0; i < classesSize; i++){
+    			if(line.contains(classes[i])){
+    				if(quitPosition >= 0 && (line.contains("_blank") && line.contains("A")))
+    				{
+    					String fakeDate = line.substring(quitPosition);
+    					String date = fakeDate.substring(48, 51);
+    					String fakeTime = line.substring(quitPosition);
+    					String time = fakeTime.substring(55, 70);
+    					String place = line.substring(quitPosition2 + 3 , quitPosition) +  
+    							line.substring(quitPosition + 5, quitPosition + 38) + date + " " + time;
+    					
+    					char[] c = place.toCharArray();
+    					Arrays.sort(c);
+    					String newPlace = new String(c);
+    					
+    					if(list.get(newPlace) == null)
+    					{
+    						Set<String> values = new HashSet<String>();
+    						values.add(place);
+    						list.put(newPlace, values);
+    					}else{
+    						Set<String> values = list.get(newPlace);
+    						values.add(place);
+    					}
+    					
+    				}else if(quitPosition1 >= 0 && (line.contains("_blank") && line.contains("A")))
+    				{
+    					String fakeDate = line.substring(quitPosition1);
+    					String date = fakeDate.substring(48, 51);
+    					String fakeTime = line.substring(quitPosition1);
+    					String time = fakeTime.substring(55, 70);
+    					String place = line.substring(quitPosition2 + 3 , quitPosition1) +  
+    							line.substring(quitPosition1 + 5, quitPosition1 + 38) + date + " " + time;
+    					
+    					char[] c = place.toCharArray();
+    					Arrays.sort(c);
+    					String newPlace = new String(c);
+    						if(list.get(newPlace) == null)
+    						{
+        						Set<String> values = new HashSet<String>();
+        						values.add(place);
+        						list.put(newPlace, values);
+        					}else{
+        						Set<String> values = list.get(newPlace);
+        						values.add(place);
+        					}
+    				}
+    			}
+    		}
+    	}
+    	
+    	for(Map.Entry<String, Set<String>> entry : list.entrySet()){
+			for(String s : entry.getValue()){
+				System.out.println(s + " ");
+			}
+    	}
+    }      
 }
+
+
 
