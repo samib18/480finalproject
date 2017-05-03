@@ -1,21 +1,46 @@
 import java.net.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.*;
 
+
 public class Schedule {
-	
-	public static void printday(String day, Map<String, Set<String>> list) { 
-			for(Map.Entry<String, Set<String>> entry : list.entrySet()){
-				for(String s : entry.getValue()){
-					String date = s.substring(43, 46);
-					if(date.contains(day)){
-						System.out.println(s);	
+	public static void printday(String day, List<String> allClasses){ 
+		DateFormat primaryFormat = new SimpleDateFormat("hh:mma");
+		Set<String> uniqueClasses = new HashSet<String>(allClasses);
+		List<String> listClasses = new ArrayList<String>(uniqueClasses);
+		
+		Comparator<String> cmp = new Comparator<String>() {
+			  public int compare(String time1, String time2) {
+			   try {
+			        return primaryFormat.parse(time1.substring(47, 55)).compareTo(primaryFormat.parse(time2.substring(47, 55)));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					return 0;
 					}
-				}
-	    	}
+			   }};
+			   
+	   Collections.sort(listClasses, cmp);
+	   for(String s : listClasses){
+			String date = s.substring(43, 46);
+			String tues = s.substring(44, 45);
+			
+			if((day.contains("T") && date.contains(day)) && !tues.contains("H")){
+				System.out.println(s);
+			}else if((day.contains("TH") && date.contains(day)) && tues.contains("H")){
+				System.out.println(s);
+			}else if((day.contains("M") && date.contains(day))){
+				System.out.println(s);
+			}else if((day.contains("W") && date.contains(day))){
+				System.out.println(s);
+			}else if((day.contains("F") && date.contains(day))){
+				System.out.println(s);
+			}
+	    }
 	}
-	
-	
+		   
     public static void main(String[] args) throws Exception {
     	
 		Scanner input = new Scanner(System.in);
@@ -38,8 +63,8 @@ public class Schedule {
     
     	String line = "";
     	int classesSize = classes.length;
-
-    	Map<String, Set<String>> list = new HashMap<String, Set<String>>();
+    	
+    	List<String> allClasses = new ArrayList<String>();
     	
     	while((line = in.readLine()) != null)
     	{
@@ -59,20 +84,9 @@ public class Schedule {
     					String place = line.substring(quitPosition2 + 3 , quitPosition) +  
     							line.substring(quitPosition + 5, quitPosition + 38) + date + " " + time;
     					
-    					char[] c = place.toCharArray();
-    					Arrays.sort(c);
-    					String newPlace = new String(c);
-    					
-    					if(list.get(newPlace) == null)
-    					{
-    						Set<String> values = new HashSet<String>();
-    						values.add(place);
-    						list.put(newPlace, values);
-    					}else{
-    						Set<String> values = list.get(newPlace);
-    						values.add(place);
+    					if(!allClasses.equals(place)){
+    						allClasses.add(place);
     					}
-    					
     				}else if(quitPosition1 >= 0 && (line.contains("_blank") && line.contains("A")))
     				{
     					String fakeDate = line.substring(quitPosition1);
@@ -82,41 +96,26 @@ public class Schedule {
     					String place = line.substring(quitPosition2 + 3 , quitPosition1) +  
     							line.substring(quitPosition1 + 5, quitPosition1 + 38) + date + " " + time;
     					
-    					char[] c = place.toCharArray();
-    					Arrays.sort(c);
-    					String newPlace = new String(c);
-    						if(list.get(newPlace) == null)
-    						{
-        						Set<String> values = new HashSet<String>();
-        						values.add(place);
-        						list.put(newPlace, values);
-        					}else{
-        						Set<String> values = list.get(newPlace);
-        						values.add(place);
-        					}
+    					if(!allClasses.equals(place)){
+    						allClasses.add(place);
+    					}
     				}
     			}
     		}
     	}
     	
-    	/*for(Map.Entry<String, Set<String>> entry : list.entrySet()){
-			for(String s : entry.getValue()){
-				System.out.println(s + " ");
-			}
-    	}*/
-    	
-    	
     	System.out.println( " --- Monday --- ");
-    	printday("M", list);
+    	printday("M", allClasses);
     	System.out.println(" --- Tuesday --- ");
-    	printday("T", list);
+    	printday("T", allClasses);
     	System.out.println(" --- Wednesday --- ");
-    	printday("W", list);
+    	printday("W", allClasses);
     	System.out.println(" --- Thursday --- ");
-    	printday("TH", list);
+    	printday("TH", allClasses);
     	System.out.println(" --- Friday --- ");
-    	printday("F", list);
-    }      
+    	printday("F", allClasses);
+    }  
+    
 }
 
 
