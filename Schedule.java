@@ -103,16 +103,25 @@ public class Schedule {
     			}
     		}
     	}
-    	
-    	System.out.println( " --- Monday --- ");
+    	System.out.println("----------------");
+    	System.out.println( "Monday Classes");
+    	System.out.println("----------------");
     	printday("M", allClasses);
-    	System.out.println(" --- Tuesday --- ");
+    	System.out.println("----------------");
+    	System.out.println("Tuesday Classes");
+    	System.out.println("----------------");
     	printday("T", allClasses);
-    	System.out.println(" --- Wednesday --- ");
+    	System.out.println("----------------");
+    	System.out.println("Wednesday Classes");
+    	System.out.println("----------------");
     	printday("W", allClasses);
-    	System.out.println(" --- Thursday --- ");
+    	System.out.println("----------------");
+    	System.out.println("Thursday Classes");
+    	System.out.println("----------------");
     	printday("TH", allClasses);
-    	System.out.println(" --- Friday --- ");
+    	System.out.println("----------------");
+    	System.out.println("Friday Classes");
+    	System.out.println("----------------");
     	printday("F", allClasses);
     }  
     
