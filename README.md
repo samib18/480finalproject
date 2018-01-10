@@ -1,3 +1,2 @@
-# 480finalproject
-# ColorBlindness
-# ColorBlindness
+# Thesis
+# Thesis

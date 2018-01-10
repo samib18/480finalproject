@@ -1,0 +1,9 @@
+<application>
+  <component name="ParameterNameHintsSettings">
+    <blacklists>
+      <blacklist language="Java">
+        <added pattern="org.apache.http.message.BasicNameValuePair.BasicNameValuePair(name,value)" />
+      </blacklist>
+    </blacklists>
+  </component>
+</application>
